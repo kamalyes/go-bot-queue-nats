@@ -2,7 +2,7 @@
 * @Author: kamalyes 501893067@qq.com
 * @Date: 2026-09-19 15:10:26
 * @LastEditors: kamalyes 501893067@qq.com
-* @LastEditTime: 2026-09-19 17:21:07
+* @LastEditTime: 2026-10-26 09:41:52
 * @FilePath: \go-bot-queue-nats\publish.go
 * @Description: NATS JetStream 队列适配器：任务入队与流保障
 *
@@ -55,15 +55,26 @@ func (q *Queue) ensureStreamOnce(ctx context.Context) error {
 	return nil
 }
 
-// ensureStream 幂等创建或复用持久化流：绑定配置的主题，
-// 历史任务保留（削峰场景的"先入队、后起消费者"不丢任务）
+// ensureStream 幂等创建或复用持久化流：绑定配置的主题集合，
+// 历史任务保留（削峰场景的"先入队、后起消费者"不丢任务）；
+// 配置了保留限值时显式收紧，防止削峰队列无限增长
 func (q *Queue) ensureStream(ctx context.Context) error {
 	const op = "ensureStream"
-	_, err := q.js.CreateOrUpdateStream(ctx, jetstream.StreamConfig{
+	subjects := q.cfg.StreamSubjects
+	if len(subjects) == 0 {
+		subjects = []string{q.cfg.Subject}
+	}
+	config := jetstream.StreamConfig{
 		Name:     q.cfg.Stream,
-		Subjects: []string{q.cfg.Subject},
-	})
-	if err != nil {
+		Subjects: subjects,
+	}
+	if q.cfg.MaxBytes > 0 {
+		config.MaxBytes = q.cfg.MaxBytes
+	}
+	if q.cfg.MaxAge > 0 {
+		config.MaxAge = q.cfg.MaxAge
+	}
+	if _, err := q.js.CreateOrUpdateStream(ctx, config); err != nil {
 		return gobot.NewTransportError(gobot.Platform(""), op, err)
 	}
 	return nil

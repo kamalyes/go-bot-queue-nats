@@ -2,7 +2,7 @@
 * @Author: kamalyes 501893067@qq.com
 * @Date: 2026-09-19 17:21:07
 * @LastEditors: kamalyes 501893067@qq.com
-* @LastEditTime: 2026-09-19 19:21:07
+* @LastEditTime: 2026-10-26 09:41:52
 * @FilePath: \go-bot-queue-nats\queue.go
 * @Description: NATS JetStream 队列适配器：构造与配置
 *
@@ -60,6 +60,14 @@ type Config struct {
 	Stream string
 	// Subject 是任务主题，缺省 DefaultSubject
 	Subject string
+	// StreamSubjects 是流级主题集合，缺省回退 Subject：
+	// 多个队列实例共享同一 Stream 时必须传同一集合（如通配主题 subscription.bot.*），
+	// 否则各实例建流/更新流时会把流主题收窄成自己的单主题，其余实例的发布与消费全部失效
+	StreamSubjects []string
+	// MaxBytes 是流字节限值，>0 时生效：削峰队列深度上限即背压上限
+	MaxBytes int64
+	// MaxAge 是流保留时长兜底，>0 时生效：防长期低流量下积压占空间
+	MaxAge time.Duration
 	// Durable 是 durable consumer 名，跨实例共享实现竞争消费，
 	// 缺省 DefaultDurable
 	Durable string
