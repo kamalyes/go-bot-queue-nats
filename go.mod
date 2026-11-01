@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/kamalyes/go-bot v0.0.0-20260918185719-0b2e8f6252cf
 	github.com/kamalyes/go-logger v0.9.0
-	github.com/kamalyes/go-toolbox v0.19.0
+	github.com/kamalyes/go-toolbox v0.19.1
 	github.com/nats-io/nats-server/v2 v2.15.0
 	github.com/nats-io/nats.go v1.51.0
 )
@@ -15,7 +15,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
-	github.com/kamalyes/go-argus v0.5.0 // indirect
+	github.com/kamalyes/go-argus v0.5.1 // indirect
 	github.com/klauspost/compress v1.20.0 // indirect
 	github.com/mattn/go-runewidth v0.0.30 // indirect
 	github.com/minio/highwayhash v1.0.4 // indirect
