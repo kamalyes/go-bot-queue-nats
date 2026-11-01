@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/kamalyes/go-bot v0.0.0-20260918185719-0b2e8f6252cf
-	github.com/kamalyes/go-logger v0.9.0
+	github.com/kamalyes/go-logger v0.10.0
 	github.com/kamalyes/go-toolbox v0.19.2
 	github.com/nats-io/nats-server/v2 v2.15.0
 	github.com/nats-io/nats.go v1.51.0
